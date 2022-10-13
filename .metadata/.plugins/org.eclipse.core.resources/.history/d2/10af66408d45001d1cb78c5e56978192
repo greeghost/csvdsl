@@ -1,0 +1,83 @@
+grammar org.xtext.first.csvdsl.CsvDsl with org.eclipse.xtext.common.Terminals
+
+generate csvDsl "http://www.xtext.org/first/csvdsl/CsvDsl"
+
+
+Model:
+    (statement+=Statement)*
+;
+
+Statement:
+    Assign |
+    Print |
+    Save
+;
+
+CsvOperation:
+    Load | Select | Drop | GetLine
+;
+
+IntOperation:
+	Sum | Product | Direct
+;
+
+Assign:
+	val=Csv_variable "=" op=CsvOperation |
+	val=Int_variable "=" op=IntOperation
+;
+
+Save:
+    'Save' '(' declared_csv=Csv_variable "," filename=STRING ")"
+;
+
+Print:
+	'Print' '(' val=(IntOperation | Int_variable) ')'
+;
+
+Load:
+    "Open" "(" filename=STRING ")"
+;
+
+
+Sum:
+    var=Int_variable '=' 'Sum' '(' selection=Csv_variable ')'
+;
+
+Product:
+    var=Int_variable '=' 'Product' '(' selection=Csv_variable ')'
+;
+
+Direct:
+	val=INT
+;
+
+Select:
+    newCsv=Csv_variable '=' csv_var=Csv_variable '.select' '(' range=Range ')'
+;
+
+Drop:
+    newCsv=Csv_variable '=' csv_var=Csv_variable '.drop' '(' range=Range ')'
+;
+
+Range:
+	RowRange |
+	ColRange
+;
+
+RowRange:
+	'Row:' row=INT |
+    'Rows:' rowStart=INT '-' rowEnd=INT
+;
+
+ColRange:
+	'Column:' column=INT |
+    'Columns:' columnStart=INT '-' columnEnd=INT
+;
+
+Csv_variable:
+    name=ID
+;
+
+Int_variable:
+    name=ID
+;

@@ -1,0 +1,67 @@
+grammar org.xtext.first.csvdsl.CsvDsl with org.eclipse.xtext.common.Terminals
+
+generate csvDsl "http://www.xtext.org/first/csvdsl/CsvDsl"
+
+
+Model:
+    (statement+=Statement)*
+;
+
+Statement:
+    Operation
+;
+
+Operation:
+    Assign | Load | Sum | Product | Save | Select | Drop
+;
+
+Assign:
+	val=Csv_variable "=" op=[Load | Select | Drop]	
+;
+
+Load:
+    "Open" "(" filename=STRING ")"
+;
+
+Save:
+    'Save' '(' declared_csv=Csv_variable "," filename=STRING ")"
+;
+
+Sum:
+    var=Variable '=' 'Sum' '(' selection=[Csv_variable] ')'
+;
+
+Product:
+    var=Variable '=' 'Product' '(' selection=[Csv_variable] ')'
+;
+
+Select:
+    newCsv=Csv_variable '=' csv_var=[Csv_variable] '.select' '(' range=Range ')'
+;
+
+Drop:
+    newCsv=Csv_variable '=' csv_var=[Csv_variable] '.drop' '(' range=Range ')'
+;
+
+Range:
+	RowRange |
+	ColRange
+;
+
+RowRange:
+	'Row:' row=INT |
+    'Rows:' rowStart=INT  '-' rowEnd=INT	
+;
+
+ColRange:
+	'Column:' column=INT |
+    'Columns:' columnStart=INT  '-' columnEnd=INT	
+;
+
+Csv_variable:
+    name=ID
+;
+
+Variable:
+    name=ID
+;

@@ -1,0 +1,9 @@
+grammar org.xtext.example.mydsl.CsvDsl with org.eclipse.xtext.common.Terminals
+
+generate csvDsl "http://www.xtext.org/example/mydsl/CsvDsl"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
